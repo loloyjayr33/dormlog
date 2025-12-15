@@ -2,6 +2,7 @@ import React from 'react'
 import { Routes, Route, Link } from 'react-router-dom'
 import Admin from './pages/Admin'
 import Occupant from './pages/Occupant'
+import Landing from './pages/Landing'
 
 export default function App() {
     return (
@@ -19,7 +20,7 @@ export default function App() {
 
             <main className="container">
                 <Routes>
-                    <Route path="/" element={<Home />} />
+                    <Route path="/" element={<Landing />} />
                     <Route path="/admin" element={<Admin />} />
                     <Route path="/occupant" element={<Occupant />} />
                 </Routes>
@@ -28,11 +29,3 @@ export default function App() {
     )
 }
 
-function Home() {
-    return (
-        <div>
-            <h2>Welcome to DormLog</h2>
-            <p>Use the Admin or Occupant pages to explore basic flows.</p>
-        </div>
-    )
-}

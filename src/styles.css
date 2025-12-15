@@ -41,3 +41,42 @@ button {
 textarea {
     font-family: inherit
 }
+
+/* Landing page styles */
+.landing-hero {
+    background: white;
+    padding: 28px;
+    border-radius: 8px;
+    box-shadow: 0 4px 16px rgba(15, 23, 42, 0.06);
+    max-width: 720px;
+}
+
+.landing-hero h2 {
+    margin-top: 0;
+}
+
+.status {
+    padding: 8px 10px;
+    border-radius: 6px;
+    font-size: 0.95rem;
+}
+
+.status.ok {
+    background: #ecfdf5;
+    color: #065f46
+}
+
+.status.err {
+    background: #fff1f2;
+    color: #9f1239
+}
+
+/* Auth card */
+.auth-card {
+    background: #ffffff;
+    padding: 16px;
+    border-radius: 8px;
+    border: 1px solid #eef2ff;
+    max-width: 420px;
+}
+.auth-card h3 { margin: 0 0 8px 0 }
