@@ -92,18 +92,20 @@ export default function Landing() {
         <div className="landing center-page">
             <section className="landing-hero landing-grid">
                 <div className="hero-left">
-                    <h1>DormLog</h1>
-                    <p className="muted">A simple dorm occupant logging app — connect with Supabase and try the demo.</p>
+                    <div className="notification-pill">Notifications at <strong>9:00 PM</strong></div>
+                    <h1>DormLog — Dormitory Monitoring</h1>
+                    <p className="muted lead">DormLog helps advisers track occupants’ sign-in and sign-out activities, daily tasks, and nighttime presence. It automatically notifies advisers at 9:00 PM about present and absent occupants, including reasons for absence — ensuring efficient, secure dorm supervision.</p>
 
-                    <div className="hero-features">
-                        <div>• Quick sign-in / sign-up</div>
-                        <div>• View and manage occupants</div>
-                        <div>• Admin and occupant views</div>
-                    </div>
+                    <ul className="hero-features-list">
+                        <li>✅ Real-time sign-in / sign-out logs</li>
+                        <li>📅 Scheduled nightly notifications at 9:00 PM</li>
+                        <li>🔒 Role-based admin and occupant views</li>
+                        <li>📱 Simple mobile-friendly UI</li>
+                    </ul>
 
                     <div style={{ marginTop: 18 }}>
-                        <Link to="/admin" className="btn-secondary">Admin</Link>
-                        <Link to="/occupant" style={{ marginLeft: 8 }}>Occupant</Link>
+                        <button className="btn-primary" onClick={() => { const el = document.getElementById('signin-form'); el?.scrollIntoView({ behavior: 'smooth', block: 'center' }) }}>Get Started — Sign In</button>
+                        <Link to="/occupant" style={{ marginLeft: 12 }} className="btn-link">Try Occupant View</Link>
                     </div>
 
                     <div style={{ marginTop: 18, fontSize: 13 }}>
