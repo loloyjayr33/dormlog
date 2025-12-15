@@ -79,4 +79,82 @@ textarea {
     border: 1px solid #eef2ff;
     max-width: 420px;
 }
-.auth-card h3 { margin: 0 0 8px 0 }
+
+.auth-card h3 {
+    margin: 0 0 8px 0
+}
+
+/* layout for improved landing */
+.center-page {
+    display: flex;
+    justify-content: center;
+    padding: 32px
+}
+
+.landing-grid {
+    display: flex;
+    gap: 24px;
+    align-items: flex-start
+}
+
+.hero-left {
+    flex: 1;
+    min-width: 280px
+}
+
+.hero-right {
+    width: 420px
+}
+
+.hero-features {
+    margin-top: 12px;
+    color: #334155
+}
+
+.muted {
+    color: #6b7280
+}
+
+.btn-secondary {
+    background: #eef2ff;
+    color: var(--accent);
+    padding: 8px 12px;
+    border-radius: 6px;
+    text-decoration: none
+}
+
+.btn-link {
+    background: transparent;
+    color: var(--accent);
+    border: none;
+    padding: 6px 8px;
+    cursor: pointer
+}
+
+.input {
+    padding: 8px 10px;
+    border-radius: 6px;
+    border: 1px solid #e5e7eb;
+    width: 100%
+}
+
+.password-toggle {
+    position: absolute;
+    right: 8px;
+    top: 8px;
+    background: transparent;
+    border: none;
+    color: #374151;
+    cursor: pointer;
+    padding: 6px
+}
+
+@media (max-width: 860px) {
+    .landing-grid {
+        flex-direction: column
+    }
+
+    .hero-right {
+        width: 100%
+    }
+}

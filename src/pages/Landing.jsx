@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
 import { supabase } from '../lib/supabaseClient'
 
 export default function Landing() {
@@ -27,6 +28,17 @@ export default function Landing() {
             listener?.subscription?.unsubscribe?.()
         }
     }, [])
+
+    const envUrl = import.meta.env.VITE_SUPABASE_URL || ''
+    const anonKeyPresent = Boolean(import.meta.env.VITE_SUPABASE_ANON_KEY)
+    let envHost = ''
+    try {
+        envHost = envUrl ? new URL(envUrl).host : ''
+    } catch (e) {
+        envHost = envUrl
+    }
+
+    const [showPassword, setShowPassword] = useState(false)
 
     async function testSupabase() {
         setLoading(true)
@@ -64,25 +76,6 @@ export default function Landing() {
         }
     }
 
-    async function signUpWithEmailAndPassword(e) {
-        e?.preventDefault()
-        if (!email || !password) {
-            setStatus({ ok: false, message: 'Enter both email and password.' })
-            return
-        }
-        setLoading(true)
-        setStatus(null)
-        try {
-            const { data, error } = await supabase.auth.signUp({ email, password })
-            if (error) setStatus({ ok: false, message: error.message })
-            else setStatus({ ok: true, message: `Account created for ${email}. Check email to confirm if required.` })
-        } catch (err) {
-            setStatus({ ok: false, message: String(err) })
-        } finally {
-            setLoading(false)
-        }
-    }
-
     async function signOut() {
         setLoading(true)
         try {
@@ -96,52 +89,75 @@ export default function Landing() {
     }
 
     return (
-        <div className="landing">
-            <section className="landing-hero">
-                <h2>Welcome to DormLog</h2>
-                <p>Quickly verify your Supabase connection and sign in with your email.</p>
+        <div className="landing center-page">
+            <section className="landing-hero landing-grid">
+                <div className="hero-left">
+                    <h1>DormLog</h1>
+                    <p className="muted">A simple dorm occupant logging app — connect with Supabase and try the demo.</p>
 
-                <div style={{ display: 'flex', gap: 8, alignItems: 'center', marginBottom: 12 }}>
-                    <button onClick={testSupabase} disabled={loading}>{loading ? 'Testing…' : 'Test Supabase'}</button>
+                    <div className="hero-features">
+                        <div>• Quick sign-in / sign-up</div>
+                        <div>• View and manage occupants</div>
+                        <div>• Admin and occupant views</div>
+                    </div>
+
+                    <div style={{ marginTop: 18 }}>
+                        <Link to="/admin" className="btn-secondary">Admin</Link>
+                        <Link to="/occupant" style={{ marginLeft: 8 }}>Occupant</Link>
+                    </div>
+
+                    <div style={{ marginTop: 18, fontSize: 13 }}>
+                        <div>Supabase host: <strong>{envHost || 'not set'}</strong></div>
+                        <div>Anon key: <strong className={anonKeyPresent ? 'ok' : 'err'}>{anonKeyPresent ? 'present' : 'missing'}</strong></div>
+                    </div>
+                </div>
+
+                <div className="hero-right">
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <h2 style={{ margin: 0 }}>Sign in</h2>
+                        <button onClick={testSupabase} className="btn-link" disabled={loading}>{loading ? 'Testing…' : 'Test DB'}</button>
+                    </div>
                     {status && (
-                        <div className={`status ${status.ok ? 'ok' : 'err'}`}>
-                            {status.message}
-                        </div>
+                        <div style={{ marginTop: 8 }} className={`status ${status.ok ? 'ok' : 'err'}`}>{status.message}</div>
                     )}
-                </div>
 
-                <div className="auth-card">
-                    <h3 style={{ marginTop: 0 }}>Sign in</h3>
-                    {user ? (
-                        <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-                            <div>Signed in as <strong>{user.email}</strong></div>
-                            <button onClick={signOut}>Sign out</button>
-                        </div>
-                    ) : (
-                        <form style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-                            <input
-                                type="email"
-                                placeholder="you@example.com"
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                                style={{ padding: '8px 10px', borderRadius: 6, border: '1px solid #e5e7eb' }}
-                            />
-                            <input
-                                type="password"
-                                placeholder="password"
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                                style={{ padding: '8px 10px', borderRadius: 6, border: '1px solid #e5e7eb' }}
-                            />
-                            <div style={{ display: 'flex', gap: 8 }}>
-                                <button onClick={signInWithEmailAndPassword} disabled={loading}>{loading ? 'Signing…' : 'Sign In'}</button>
-                                <button onClick={signUpWithEmailAndPassword} type="button" disabled={loading}>{loading ? 'Creating…' : 'Create Account'}</button>
+                    <div className="auth-card" style={{ marginTop: 12 }}>
+                        {user ? (
+                            <div>
+                                <div>Signed in as <strong>{user.email}</strong></div>
+                                <div style={{ fontSize: 12, color: '#6b7280' }}>id: {user.id}</div>
+                                <div style={{ marginTop: 8 }}>
+                                    <button onClick={signOut}>Sign out</button>
+                                </div>
                             </div>
-                        </form>
-                    )}
-                </div>
+                        ) : (
+                            <form onSubmit={signInWithEmailAndPassword} style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                                <input
+                                    className="input"
+                                    type="email"
+                                    placeholder="you@example.com"
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
+                                />
 
-                <small style={{ display: 'block', marginTop: 12, color: '#6b7280' }}>Important: ensure VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY are set in your .env</small>
+                                <div style={{ position: 'relative' }}>
+                                    <input
+                                        className="input"
+                                        type={showPassword ? 'text' : 'password'}
+                                        placeholder="password"
+                                        value={password}
+                                        onChange={(e) => setPassword(e.target.value)}
+                                    />
+                                    <button type="button" className="password-toggle" onClick={() => setShowPassword(s => !s)}>{showPassword ? 'Hide' : 'Show'}</button>
+                                </div>
+
+                                <div style={{ display: 'flex', gap: 8 }}>
+                                    <button type="submit" disabled={loading}>{loading ? 'Signing…' : 'Sign In'}</button>
+                                </div>
+                            </form>
+                        )}
+                    </div>
+                </div>
             </section>
         </div>
     )
